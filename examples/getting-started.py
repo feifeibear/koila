@@ -6,7 +6,7 @@ import torch
 from torch import Tensor
 from torch.nn import CrossEntropyLoss, Flatten, Linear, Module, ReLU, Sequential
 
-from koila import LazyTensor, lazy
+from koila import LazyTensor, lazy, BatchInfo
 
 loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
 for logger in loggers:
@@ -90,7 +90,9 @@ lazy_out = network(lazy_input)
 # The output would automatically be a LazyTensor
 # but don't worry, no code modification is needed.
 # When backward is called, the LazyTensors would be automatically evaluated.
-lazy_loss = loss_fn(lazy_out, label)
+lazy_label = lazy(label, 0)
+assert isinstance(lazy_label, LazyTensor), type(lazy_label)
+lazy_loss = loss_fn(lazy_out, lazy_label)
 assert isinstance(lazy_loss, LazyTensor), type(lazy_loss)
 network.zero_grad()
 lazy_loss.backward()

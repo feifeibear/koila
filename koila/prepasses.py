@@ -367,12 +367,13 @@ def loss(
     mute_unused_args(*args, **kwargs)
 
     # Currently only supports tensors of the same size.
-    if (shape := input.size()) != target.size():
-        raise UnsupportedError
+    # if (shape := input.size()) != target.size():
+    #     raise UnsupportedError
 
-    if (batch := interfaces.bat(input)) != interfaces.bat(target):
-        raise UnsupportedError
-
+    # if (batch := interfaces.bat(input)) != interfaces.bat(target):
+    #     raise UnsupportedError
+    shape = input.size()
+    batch = interfaces.bat(input)
     output_shape = {
         "none": shape,
         "mean": (),
